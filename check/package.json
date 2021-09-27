@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "axios": "^0.21.1"
+  },
+  "dependencies": {
+    "mongodb-realm-cli": "^2.1.0"
+  }
+}
