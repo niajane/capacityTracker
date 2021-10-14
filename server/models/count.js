@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const countSchema = new mongoose.Schema({
-    "date": Date,
+    "date": Number,
     "count": Number,
-}, { collection : 'rocbloc' });
+}, { collection : 'depotTest' });
 
 const Count = mongoose.model('count', countSchema);
 
