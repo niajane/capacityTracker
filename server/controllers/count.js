@@ -79,6 +79,11 @@ const getAllDays = async(req,res) => {
                         avgCount: { $avg: "$count" }
                     }
                 },
+                {
+                    $addFields: {
+                        avgCount: { $round: ['$avgCount'] },
+                    }
+                },
                 { 
                     $sort : 
                         { 
@@ -97,6 +102,12 @@ const getAllDays = async(req,res) => {
                         },
                     }
                 },
+                { 
+                    $sort : 
+                        { 
+                            _id : 1
+                        }
+                }   
                 
             ]
         )
@@ -129,7 +140,12 @@ const getAvDay = async(req, res) => {
                         $group:
                         {
                             _id: "$time",
-                            avgCount: { $avg: "$count" }
+                            avgCount: {$avg: "$count" }
+                        }
+                    },
+                    {
+                        $addFields: {
+                            avgCount: { $round: ['$avgCount'] },
                         }
                     },
                     { 
@@ -137,7 +153,19 @@ const getAvDay = async(req, res) => {
                         { 
                             _id : 1
                         }
-                    }   
+                    },
+                    {
+                        $group: 
+                        {
+                            _id: day,
+                            times: { 
+                                "$push": { 
+                                    _id: "$_id",
+                                    avgCount: "$avgCount"
+                                },
+                            },
+                        }
+                    },   
                 ]
             )
             res.status(200).json(posts);
