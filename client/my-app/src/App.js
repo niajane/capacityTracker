@@ -14,6 +14,7 @@ function App() {
   //add show all
 
   const days = [
+    {value: 0, label:'View All'},
     {value: 1, label:'Sunday'}, 
     {value: 2, label:'Monday'},
     {value: 3, label:'Tuesday'},
@@ -24,7 +25,7 @@ function App() {
   ]
 
   const [location, setLocation] = useState(options[0]);
-  const [day, setDay] = useState(1);
+  const [day, setDay] = useState(0);
 
   return (
     <div className="App">
@@ -33,7 +34,7 @@ function App() {
       </header>
       <body>
         <Dropdown options={options} onChange={setLocation} value={location} placeholder="Select an option" />
-        <Dropdown options={days} onChange={(opt) => setDay(opt.value)} value={days[day-1]} placeholder="Select an option" />
+        <Dropdown options={days} onChange={(opt) => setDay(opt.value)} value={days[day]} placeholder="Select an option" />
         <Chart location={location} day={day}/>
       </body>
     </div>
