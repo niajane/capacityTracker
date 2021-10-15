@@ -57,4 +57,46 @@ const getAverage = async(req, res) => {
     }
 }
 
-module.exports = { getCounts, getLastFourWeeks, getAverage }
+const getAvDay = async(req, res) => {
+    //sanitize input
+    try {
+        var day = 0;
+        if (0 < parseInt(req.params.day) < 8){
+            day = parseInt(req.params.day)
+        } 
+        const posts = await Count.aggregate(
+            [
+                {
+                    $match: {
+                        weekday : day
+                    }
+                },
+                {
+                    $project: {
+                        time: {$add: [{$multiply: [{$hour: "$date2"}, 60]}, {$minute: "$date2"}]},
+                        date: 1,
+                        count: 1
+                    }
+                },
+                {
+                    $group:
+                    {
+                        _id: "$time",
+                        avgCount: { $avg: "$count" }
+                    }
+                },
+                { 
+                  $sort : 
+                    { 
+                        _id : 1
+                    }
+                }   
+            ]
+        )
+        res.status(200).json(posts);
+    } catch(error) {
+        res.status(400).json({success: false, error});
+    } 
+}
+
+module.exports = { getCounts, getLastFourWeeks, getAverage, getAvDay }
